@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PlotterDirective } from 'math-plot';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,

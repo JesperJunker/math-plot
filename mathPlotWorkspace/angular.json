@@ -67,12 +67,7 @@
             "styles": [
               "projects/math-plot-demo/src/styles.scss"
             ],
-            "scripts": [],
-            "server": "projects/math-plot-demo/src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "projects/math-plot-demo/server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
