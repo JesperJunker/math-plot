@@ -1,0 +1,27 @@
+@let t = tree();
+@if (paranthesis()) {
+  <span>(</span>
+}
+@if (t) {
+  @if (isNumberNode(t)) {
+    <span>{{t.value}}</span>
+  } @else if (isBinaryNode(t)) {
+      @if(t.operator === '-' || t.operator === '+') {
+        <lib-formula-renderer formula={{t.left}}></lib-formula-renderer>
+        <span>{{t.operator}}</span>
+        <lib-formula-renderer formula={{t.right}}></lib-formula-renderer>
+      } @else if (t.operator === '/') {
+        <span class="fraction">
+          <span class="numerator"><lib-formula-renderer formula={{t.left}}></lib-formula-renderer></span>
+          <span class="denominator"><lib-formula-renderer formula={{t.right}}></lib-formula-renderer></span>
+        </span>
+      } @else if (t.operator === '*') {
+        <lib-formula-renderer formula={{t.left}}  [paranthesis]="isLessPrecedence(t.operator, t.left)"></lib-formula-renderer>
+        <span>·</span>
+        <lib-formula-renderer formula={{t.right}} [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer>
+      }
+    }
+  }
+@if (paranthesis()) {
+  <span>)</span>
+}

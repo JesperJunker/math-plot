@@ -1,0 +1,23 @@
+span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fraction {
+    font-size: 90%;
+}
+
+.fraction, .operator, .number {
+    text-align: center;
+    padding: .1em;
+}
+
+.numerator, .denominator {
+    display: block;
+    padding-left: .1em;
+    padding-right: .1em;
+}
+
+.numerator {
+    border-bottom: 1px solid black;
+}
