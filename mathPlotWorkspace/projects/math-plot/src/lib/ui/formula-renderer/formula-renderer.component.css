@@ -21,3 +21,22 @@ span {
 .numerator {
     border-bottom: 1px solid black;
 }
+
+.normal {
+    vertical-align: .5em
+}
+
+.big {
+    vertical-align: .75em;
+    transform: scale(1, 1.5);
+}
+
+.bigger {
+    vertical-align: 1.25em;
+    transform: scale(1, 2.25);
+}
+
+.biggest {
+    vertical-align: 1.475em;
+    transform: scale(1, 3.375);
+}

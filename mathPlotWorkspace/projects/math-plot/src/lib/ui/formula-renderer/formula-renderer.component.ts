@@ -36,4 +36,34 @@ export class FormulaRendererComponent {
     }
     return false;
   }
+
+  calculateAlign(node: BinaryNode): string {
+    return (
+      (node.operator === '/' ? 0.5 : 0) +
+      (this.isBinaryNode(node.left) && node.left.operator === '/' ? 0.5 : 0) +
+      (this.isBinaryNode(node.right) && node.right.operator === '/' ? 0.5 : 0) +
+      'em'
+    );
+  }
+
+  paranthesisStyle(node: MathTreeNode) {
+    if (this.isBinaryNode(node) && node.operator === '/') {
+      if (
+        this.isBinaryNode(node.left) &&
+        node.left.operator === '/' &&
+        this.isBinaryNode(node.right) &&
+        node.right.operator === '/'
+      ) {
+        return 'biggest';
+      }
+      if (this.isBinaryNode(node.left) && node.left.operator === '/') {
+        return 'bigger';
+      }
+      if (this.isBinaryNode(node.right) && node.right.operator === '/') {
+        return 'bigger-low';
+      }
+      return 'big';
+    }
+    return 'normal';
+  }
 }

@@ -1,27 +1,42 @@
 @let t = tree();
-@if (paranthesis()) {
-  <span>(</span>
+@if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
+  <span [classList]="'paranthesis'">(</span>
 }
 @if (t) {
   @if (isNumberNode(t)) {
     <span>{{t.value}}</span>
   } @else if (isBinaryNode(t)) {
-      @if(t.operator === '-' || t.operator === '+') {
-        <lib-formula-renderer formula={{t.left}}></lib-formula-renderer>
-        <span>{{t.operator}}</span>
-        <lib-formula-renderer formula={{t.right}}></lib-formula-renderer>
-      } @else if (t.operator === '/') {
-        <span class="fraction">
+    @if(t.operator === '-' || t.operator === '+') {
+      <lib-formula-renderer formula={{t.left}}></lib-formula-renderer>
+      <span>{{t.operator}}</span>
+      <lib-formula-renderer formula={{t.right}}></lib-formula-renderer>
+    } @else if (t.operator === '/') {
+      <span class="fraction">
+        @if (paranthesis()) {
+          <span [classList]="paranthesisStyle(t) +  ' paranthesis'">(</span>
+        }
+        <div style="display: inline-block;">
           <span class="numerator"><lib-formula-renderer formula={{t.left}}></lib-formula-renderer></span>
           <span class="denominator"><lib-formula-renderer formula={{t.right}}></lib-formula-renderer></span>
-        </span>
-      } @else if (t.operator === '*') {
-        <lib-formula-renderer formula={{t.left}}  [paranthesis]="isLessPrecedence(t.operator, t.left)"></lib-formula-renderer>
-        <span>·</span>
-        <lib-formula-renderer formula={{t.right}} [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer>
-      }
+        </div>
+        @if (paranthesis()) {
+          <span [classList]="paranthesisStyle(t) + ' paranthesis'">)</span>
+        }
+      </span>
+    } @else if (t.operator === '*') {
+      <lib-formula-renderer formula={{t.left}}  [paranthesis]="isLessPrecedence(t.operator, t.left)"></lib-formula-renderer>
+      <span>·</span>
+      <lib-formula-renderer formula={{t.right}} [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer>
+    } @else {
+      <lib-formula-renderer formula={{t.left}}  [paranthesis]="(isNumberNode(t.left) && t.left.calculate() < 0) || isBinaryNode(t.left)"></lib-formula-renderer>
+      <sup><lib-formula-renderer formula={{t.right}} [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer></sup>
+    }
+  } @else if(isUnaryNode(t)) {
+    @if(t.operator === 'neg') {
+      <span>-</span><lib-formula-renderer formula={{t.value}} [paranthesis]="isLessPrecedence(t.operator, t.value)"></lib-formula-renderer>
     }
   }
-@if (paranthesis()) {
-  <span>)</span>
+}
+@if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
+  <span [classList]="'paranthesis'">)</span>
 }
