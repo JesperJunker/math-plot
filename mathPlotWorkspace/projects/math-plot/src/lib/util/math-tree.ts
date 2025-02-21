@@ -116,6 +116,18 @@ export class UnaryNode implements MathTreeNode {
       case 'neg':
         str = '-' + this.value.toString(false);
         break;
+      case 'sin':
+        str = 'sin' + this.value.toString(true)
+        break
+      case 'cos':
+        str = 'cos' + this.value.toString(true)
+        break
+      case 'tan':
+        str = 'tan' + this.value.toString(true)
+        break
+      case 'cot':
+        str = 'cot' + this.value.toString(true)
+        break
       default:
         str = '';
     }
@@ -137,10 +149,18 @@ export class NumberNode implements MathTreeNode {
 }
 
 function isOperator(op: string) {
-  return ['+', '-', '*', '/', 'neg', '^'].indexOf(op) !== -1;
+  return ['+', '-', '*', '/', 'neg', '^', 'sin', 'cos', 'tan', 'cot'].indexOf(op) !== -1;
+}
+
+function isUnaryOperator(op: string): boolean {
+  return ['neg', 'sin', 'cos', 'tan', 'cot'].indexOf(op) !== -1;
 }
 
 export const precedence: Record<string, Number> = {
+  'sin':5,
+  'cos':5,
+  'tan':5,
+  'cot':5,
   '^': 4,
   neg: 3,
   '*': 2,
@@ -150,7 +170,7 @@ export const precedence: Record<string, Number> = {
 };
 
 function infixToPostFix(input: string): string[] {
-  const tokens = input.match(/\d+(\.\d+)?|[+\-*/^()]/g) || [];
+  const tokens = input.match(/\d+(\.\d+)?|[+\-*/^()]|(sin|cos|tan|cot)/g) || [];
   const output: string[] = [];
   const operators: string[] = [];
   let prevToken = '';
@@ -209,7 +229,7 @@ export function mathTree(input: string): MathTreeNode {
   for (const token of tokens) {
     if (!isOperator(token)) {
       stack.push(new NumberNode(token));
-    } else if (token === 'neg') {
+    } else if (isUnaryOperator(token)) {
       const operator = stack.pop();
       if (operator) {
         stack.push(new UnaryNode(token, operator));

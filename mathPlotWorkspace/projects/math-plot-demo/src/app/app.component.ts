@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PlotterDirective } from 'math-plot';
-import { FormulaRendererComponent } from '../../../math-plot/src/lib/ui/formula-renderer/formula-renderer.component';
+import { PlotterDirective, RendererComponent } from 'math-plot';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, PlotterDirective, FormulaRendererComponent],
+  imports: [RouterOutlet, PlotterDirective, RendererComponent, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

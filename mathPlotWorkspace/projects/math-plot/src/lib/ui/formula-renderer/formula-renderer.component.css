@@ -32,11 +32,16 @@ span {
 }
 
 .bigger {
-    vertical-align: 1.25em;
-    transform: scale(1, 2.25);
+  vertical-align: 1.45em;
+  transform: scale(1, 2.25);
+}
+
+.bigger-low {
+  vertical-align: .75em;
+  transform: scale(1, 2.25);
 }
 
 .biggest {
-    vertical-align: 1.475em;
+    vertical-align: 1.55em;
     transform: scale(1, 3.375);
 }

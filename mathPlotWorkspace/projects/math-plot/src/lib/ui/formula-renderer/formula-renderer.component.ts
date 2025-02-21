@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import {Component, computed, effect, input} from '@angular/core';
 import {
   mathTree,
   BinaryNode,
@@ -16,9 +16,8 @@ import {
   styleUrl: './formula-renderer.component.css',
 })
 export class FormulaRendererComponent {
-  formula = input.required<string>();
+  formula = input.required<MathTreeNode>();
   readonly paranthesis = input<boolean>(false);
-  readonly tree = computed(() => mathTree(this.formula()));
 
   isBinaryNode(node: any): node is BinaryNode {
     return node instanceof BinaryNode;
@@ -37,16 +36,7 @@ export class FormulaRendererComponent {
     return false;
   }
 
-  calculateAlign(node: BinaryNode): string {
-    return (
-      (node.operator === '/' ? 0.5 : 0) +
-      (this.isBinaryNode(node.left) && node.left.operator === '/' ? 0.5 : 0) +
-      (this.isBinaryNode(node.right) && node.right.operator === '/' ? 0.5 : 0) +
-      'em'
-    );
-  }
-
-  paranthesisStyle(node: MathTreeNode) {
+  paranthesisStyle(node: MathTreeNode): string {
     if (this.isBinaryNode(node) && node.operator === '/') {
       if (
         this.isBinaryNode(node.left) &&
@@ -66,4 +56,7 @@ export class FormulaRendererComponent {
     }
     return 'normal';
   }
+
+  protected readonly Math = Math;
+  protected readonly Number = Number;
 }
