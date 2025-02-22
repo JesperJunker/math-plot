@@ -1,8 +1,9 @@
-import {Component, computed, input} from '@angular/core';
-import {mathTree} from '../../util/math-tree';
+import {Component} from '@angular/core';
+import {mathTree, MathTreeNode, NumberNode} from '../../util/math-tree';
 import {FormulaRendererComponent} from '../../ui/formula-renderer/formula-renderer.component';
 import {PlotRendererComponent} from '../../ui/plot-renderer/plot-renderer.component';
 import {PlotterFormComponent} from '../../ui/plotter-form/plotter-form.component';
+import {PlotterConfig} from '../../models/plotterConfig';
 
 @Component({
   selector: 'lib-renderer',
@@ -16,6 +17,40 @@ import {PlotterFormComponent} from '../../ui/plotter-form/plotter-form.component
   styleUrl: './renderer.component.css'
 })
 export class RendererComponent {
-  formula = input.required<string>()
-  tree = computed(() => mathTree(this.formula()))
+  formula = ''
+  tree: MathTreeNode = new NumberNode('0')
+  config: PlotterConfig = new PlotterConfig()
+
+  formChanges(event: PlotterConfig) {
+    console.log('changing')
+    this.formula = event.formula
+    let points = []
+    this.tree = mathTree(event.formula)
+
+    if (event.planeType === 'Cartesian') {
+      for (let i = event.start; i <= event.end; i++) {
+        let y = this.tree.calculate(i)
+        if (isFinite(y)) {
+          points.push({x: i, y})
+        } else {
+          return
+        }
+      }
+    } else {
+      for (let i = event.start; i <= event.end; i++) {
+        let radius = this.tree.calculate(i)
+        if (isFinite(radius)) {
+          points.push({
+            x: radius,
+            y: radius
+          })
+        } else {
+          return
+        }
+      }
+    }
+    this.config = {...event, points}
+  }
+
+  protected readonly console = console;
 }

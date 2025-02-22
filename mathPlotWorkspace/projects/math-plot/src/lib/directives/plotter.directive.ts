@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Renderer2, OnInit, inject, input  } from '@angular/core';
-import { PlotterConfig } from '../models/plotterConfig';
+import {computed, Directive, effect, ElementRef, inject, input, OnInit, Renderer2} from '@angular/core';
+import {PlotterConfig} from '../models/plotterConfig';
 
 @Directive({
   selector: '[libPlotter]',
@@ -8,24 +8,43 @@ import { PlotterConfig } from '../models/plotterConfig';
 export class PlotterDirective implements OnInit {
   elementRef = inject(ElementRef)
   renderer = inject(Renderer2)
-  config = input<PlotterConfig>(new PlotterConfig())
-  coordinateSystem = null
-  curve = null
+  config = input.required<PlotterConfig>()
+  plottedPoints = effect(() => this.calculate(this.config().points))
+  private plotPath = this.renderer.createElement('path', 'svg')
 
 
-
-  calculate() {
+  calculate(input: { x: number; y: number }[]) {
+    if (!input || !input.length) {
+      return
+    } else {
+      console.log(input)
+    }
     let points = []
     let conf = this.config()
-    for(let i = conf.start; i <= conf.end; i++) {
-      points.push(
-        [
-          Math.cos(conf.n/conf.d*2*Math.PI*i/360)*100*Math.cos(2*Math.PI*i/360)+101, 
-          Math.cos(conf.n/conf.d*2*Math.PI*i/360)*100*Math.sin(2*Math.PI*i/360)+101
-        ]
-      )
+    const scale = 100
+    const offset = 101
+    if(conf.planeType === 'Polar') {
+      for (let i = conf.start; i <= conf.end; i++) {
+        console.log(i)
+        points.push(
+          [
+            input[i-conf.start].x * scale * Math.sin(Math.PI * i / 180) + offset,
+            202-(input[i-conf.start].y * scale * Math.cos(Math.PI * i / 180) + offset)
+          ]
+        )
+      }
+    } else {
+      for (let i = conf.start; i <= conf.end; i++) {
+        points.push(
+          [
+            input[i-conf.start].x,
+            input[i-conf.start].y
+          ]
+        )
+      }
     }
-    return points
+    console.log(points)
+    this.plotPath.setAttribute('d', 'M' + points.map(p => p[0] + ' ' + p[1]).join(', '))
   }
 
   createCircle(cx: string, cy: string, r: string) {
@@ -49,11 +68,10 @@ export class PlotterDirective implements OnInit {
   }
 
   ngOnInit() {
-    let points = this.calculate()
     console.log('initiating plotter directive')
     const svg = this.renderer.createElement('svg', 'svg')
     svg.setAttribute('viewBox', '0 0 202 202')
-    svg.setAttribute('stroke', 'black')
+    svg.setAttribute('stroke', 'rgba(0,0,0,.4)')
     svg.setAttribute('fill', 'none')
     svg.setAttribute('height', '200')
     svg.setAttribute('width', '200')
@@ -78,11 +96,9 @@ export class PlotterDirective implements OnInit {
     this.renderer.appendChild(svg, line)
     line = this.createLine('1', '101', '201', '101', '-150')
     this.renderer.appendChild(svg, line)
-    let plotPath = this.renderer.createElement('path', 'svg')
-    plotPath.setAttribute('stroke', 'blue')
-    plotPath.setAttribute('d', 'M' + points.map(x => x.join(' ')).join(', '))
+    this.plotPath.setAttribute('stroke', 'blue')
     this.renderer.appendChild(svg, this.renderer.createText('text'))
     this.renderer.appendChild(this.elementRef.nativeElement, svg)
-    this.renderer.appendChild(svg, plotPath)
+    this.renderer.appendChild(svg, this.plotPath)
   }
 }

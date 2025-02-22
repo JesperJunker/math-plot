@@ -1,5 +1,5 @@
 export interface MathTreeNode {
-  calculate(): number;
+  calculate(x: number): number;
   toString(parantheses: boolean): string;
 }
 
@@ -61,7 +61,7 @@ export class BinaryNode implements MathTreeNode {
         str =
           this.left.toString(
             (this.left instanceof NumberNode &&
-              (this.left as NumberNode).calculate() < 0) ||
+              (this.left as NumberNode).calculate(0) < 0) ||
               this.left instanceof BinaryNode
           ) +
           ' ^ ' +
@@ -75,18 +75,18 @@ export class BinaryNode implements MathTreeNode {
     return parantheses ? '(' + str + ')' : str;
   }
 
-  calculate(): number {
+  calculate(x: number): number {
     switch (this.operator) {
       case '+':
-        return this.left.calculate() + this.right.calculate();
+        return this.left.calculate(x) + this.right.calculate(x);
       case '-':
-        return this.left.calculate() - this.right.calculate();
+        return this.left.calculate(x) - this.right.calculate(x);
       case '*':
-        return this.left.calculate() * this.right.calculate();
+        return this.left.calculate(x) * this.right.calculate(x);
       case '/':
-        return this.left.calculate() / this.right.calculate();
+        return this.left.calculate(x) / this.right.calculate(x);
       case '^':
-        return Math.pow(this.left.calculate(), this.right.calculate());
+        return Math.pow(this.left.calculate(x), this.right.calculate(x));
       default:
         return NaN;
     }
@@ -102,10 +102,12 @@ export class UnaryNode implements MathTreeNode {
     this.value = val;
   }
 
-  calculate(): number {
+  calculate(x: number): number {
     switch (this.operator) {
       case 'neg':
-        return -this.value.calculate();
+        return -this.value.calculate(x);
+      case 'sin':
+        return Math.sin(this.value.calculate(x)*Math.PI/180)
       default:
         return NaN;
     }
@@ -143,7 +145,10 @@ export class NumberNode implements MathTreeNode {
   toString(parantheses: boolean): string {
     return parantheses ? '(' + this.value + ')' : this.value;
   }
-  calculate(): number {
+  calculate(x: number): number {
+    if (this.value === 'x' ) {
+      return x
+    }
     return parseFloat(this.value);
   }
 }
@@ -170,14 +175,14 @@ export const precedence: Record<string, Number> = {
 };
 
 function infixToPostFix(input: string): string[] {
-  const tokens = input.match(/\d+(\.\d+)?|[+\-*/^()]|(sin|cos|tan|cot)/g) || [];
+  const tokens = input.match(/\d+(\.\d+)?|[+\-*/^()]|(sin|cos|tan|cot)|x/g) || [];
   const output: string[] = [];
   const operators: string[] = [];
   let prevToken = '';
   for (const t in tokens) {
-    if (!isNaN(Number(tokens[t]))) {
+    if (!isNaN(Number(tokens[t])) || tokens[t] === 'x') {
       if (
-        operators[operators.length - 1] === 'neg' &&
+        tokens[t] !== 'x' && operators[operators.length - 1] === 'neg' &&
         ((Number(t) + 1 < tokens.length && tokens[Number(t) + 1] !== '^') ||
           Number(t) + 1 >= tokens.length)
       ) {
