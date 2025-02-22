@@ -28,8 +28,8 @@ export class PlotterDirective implements OnInit {
         console.log(i)
         points.push(
           [
-            input[i-conf.start].x * scale * Math.sin(Math.PI * i / 180) + offset,
-            202-(input[i-conf.start].y * scale * Math.cos(Math.PI * i / 180) + offset)
+            input[i-conf.start].x * scale * Math.cos(Math.PI * i / 180) + offset,
+            202-(input[i-conf.start].y * scale * Math.sin(Math.PI * i / 180) + offset)
           ]
         )
       }

@@ -108,6 +108,8 @@ export class UnaryNode implements MathTreeNode {
         return -this.value.calculate(x);
       case 'sin':
         return Math.sin(this.value.calculate(x)*Math.PI/180)
+      case 'cos':
+        return Math.cos(this.value.calculate(x)*Math.PI/180)
       default:
         return NaN;
     }
