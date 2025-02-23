@@ -27,12 +27,11 @@ export class RendererComponent {
     this.tree = mathTree(event.formula);
 
     if (event.planeType === 'Cartesian') {
-      for (let i = event.start; i <= event.end; i += 0.01) {
-        let y = this.tree.calculate(i, false);
+      for (let i = 0; i <= (event.end - event.start) * 100; i++) {
+        let y = this.tree.calculate(i / 100 + event.start, false);
         if (isFinite(y)) {
-          points.push({ x: i, y });
+          points.push({ x: i / 100, y });
         } else {
-          this.console.log(this.tree, i);
           return;
         }
       }

@@ -26,7 +26,6 @@ export class PlotterFormComponent {
   changeType = toSignal(this.formulaGroup.controls.type.valueChanges);
   eff2 = effect(() => {
     if (this.changeType() && this.changeType() !== this.previousType) {
-      console.log(this.previousType, this.changeType());
       if (this.previousType == 'Polar') {
         this.formulaGroup
           .get('start')
