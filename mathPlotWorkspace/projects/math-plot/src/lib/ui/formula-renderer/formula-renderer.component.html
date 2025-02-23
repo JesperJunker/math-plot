@@ -5,7 +5,7 @@
 @if (t) {
   @if (isNumberNode(t)) {
   @if (t.value !== 'x') {
-    @if (t.calculate(0) < 0) {
+    @if (t.calculate(0, false) < 0) {
       <span>–</span>
     }
     <span>{{Math.abs(Number(t.value))}}</span>
@@ -39,7 +39,7 @@
       <span>·</span>
       <lib-formula-renderer [formula]="t.right" [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer>
     } @else {
-      <lib-formula-renderer [formula]="t.left"  [paranthesis]="(isNumberNode(t.left) && t.left.calculate(0) < 0) || isBinaryNode(t.left)"></lib-formula-renderer>
+      <lib-formula-renderer [formula]="t.left"  [paranthesis]="(isNumberNode(t.left) && t.left.calculate(0, false) < 0) || isBinaryNode(t.left)"></lib-formula-renderer>
       <sup><lib-formula-renderer [formula]="t.right" [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer></sup>
     }
   } @else if(isUnaryNode(t)) {

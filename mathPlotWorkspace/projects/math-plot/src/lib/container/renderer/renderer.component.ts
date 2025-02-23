@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {mathTree, MathTreeNode, NumberNode} from '../../util/math-tree';
-import {FormulaRendererComponent} from '../../ui/formula-renderer/formula-renderer.component';
-import {PlotRendererComponent} from '../../ui/plot-renderer/plot-renderer.component';
-import {PlotterFormComponent} from '../../ui/plotter-form/plotter-form.component';
-import {PlotterConfig} from '../../models/plotterConfig';
+import { Component } from '@angular/core';
+import { mathTree, MathTreeNode, NumberNode } from '../../util/math-tree';
+import { FormulaRendererComponent } from '../../ui/formula-renderer/formula-renderer.component';
+import { PlotRendererComponent } from '../../ui/plot-renderer/plot-renderer.component';
+import { PlotterFormComponent } from '../../ui/plotter-form/plotter-form.component';
+import { PlotterConfig } from '../../models/plotterConfig';
 
 @Component({
   selector: 'lib-renderer',
@@ -11,45 +11,45 @@ import {PlotterConfig} from '../../models/plotterConfig';
   imports: [
     FormulaRendererComponent,
     PlotRendererComponent,
-    PlotterFormComponent
+    PlotterFormComponent,
   ],
   templateUrl: './renderer.component.html',
-  styleUrl: './renderer.component.css'
+  styleUrl: './renderer.component.css',
 })
 export class RendererComponent {
-  formula = ''
-  tree: MathTreeNode = new NumberNode('0')
-  config: PlotterConfig = new PlotterConfig()
+  formula = '';
+  tree: MathTreeNode = new NumberNode('0');
+  config: PlotterConfig = new PlotterConfig();
 
   formChanges(event: PlotterConfig) {
-    console.log('changing')
-    this.formula = event.formula
-    let points = []
-    this.tree = mathTree(event.formula)
+    this.formula = event.formula;
+    let points = [];
+    this.tree = mathTree(event.formula);
 
     if (event.planeType === 'Cartesian') {
-      for (let i = event.start; i <= event.end; i++) {
-        let y = this.tree.calculate(i)
+      for (let i = event.start; i <= event.end; i += 0.01) {
+        let y = this.tree.calculate(i, false);
         if (isFinite(y)) {
-          points.push({x: i, y})
+          points.push({ x: i, y });
         } else {
-          return
+          this.console.log(this.tree, i);
+          return;
         }
       }
     } else {
       for (let i = event.start; i <= event.end; i++) {
-        let radius = this.tree.calculate(i)
+        let radius = this.tree.calculate(i, true);
         if (isFinite(radius)) {
           points.push({
             x: radius,
-            y: radius
-          })
+            y: radius,
+          });
         } else {
-          return
+          return;
         }
       }
     }
-    this.config = {...event, points}
+    this.config = { ...event, points };
   }
 
   protected readonly console = console;
