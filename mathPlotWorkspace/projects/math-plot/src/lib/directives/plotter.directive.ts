@@ -45,12 +45,17 @@ export class PlotterDirective implements OnInit {
       const min_x = Math.min(...input.map((v) => v.x));
       const max_y = Math.max(...input.map((v) => v.y));
       const min_y = Math.min(...input.map((v) => v.y));
+      const margin = 10;
+      const offset = 10;
       for (let i = 0; i <= (conf.end - conf.start) * 100; i++) {
         points.push([
-          ((input[i].x - min_x) * scale * width) / ((max_x - min_x) * 100 + 10),
+          ((input[i].x - min_x) * scale * (width - margin - offset)) /
+            ((max_x - min_x) * 100) +
+            offset,
           height -
-            ((input[i].y - min_y) * scale * height) /
-              ((max_y - min_y) * 100 + 10),
+            offset -
+            ((input[i].y - min_y) * scale * (height - margin - offset)) /
+              ((max_y - min_y) * 100),
         ]);
       }
     }
