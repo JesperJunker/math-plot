@@ -35,8 +35,8 @@ export class PlotRendererComponent implements AfterViewInit {
     let points = [];
     let conf = this.config();
     const scale = 100;
-    const offset = 101;
     if (conf.planeType === 'Polar') {
+      const offset = 101;
       for (let i = conf.start; i <= conf.end; i++) {
         points.push([
           offset +
@@ -53,15 +53,31 @@ export class PlotRendererComponent implements AfterViewInit {
       const max_y = Math.max(...input.map((v) => v.y));
       const min_y = Math.min(...input.map((v) => v.y));
       const margin = 10;
-      const offset = 10;
+      if (this.lines.length > 3) {
+        let x =
+          (-min_x * scale * (width - 2 * margin)) / ((max_x - min_x) * 100) +
+          margin;
+        x = Math.max(0, Math.min(width - margin, x));
+        let y =
+          height -
+          margin -
+          (-min_y * scale * (height - 2 * margin)) / ((max_y - min_y) * 100);
+        y = Math.max(0, Math.min(height - margin, y));
+        console.log(x, min_x, max_x);
+        console.log(y, min_y, max_y);
+        this.lines[0].setAttribute('y1', String(y));
+        this.lines[0].setAttribute('y2', String(y));
+        this.lines[3].setAttribute('x1', String(x));
+        this.lines[3].setAttribute('x2', String(x));
+      }
       for (let i = 0; i <= (conf.end - conf.start) * 100; i++) {
         points.push([
-          ((input[i].x - min_x) * scale * (width - margin - offset)) /
+          ((input[i].x - min_x) * scale * (width - 2 * margin)) /
             ((max_x - min_x) * 100) +
-            offset,
+            margin,
           height -
-            offset -
-            ((input[i].y - min_y) * scale * (height - margin - offset)) /
+            margin -
+            ((input[i].y - min_y) * scale * (height - 2 * margin)) /
               ((max_y - min_y) * 100),
         ]);
       }
@@ -111,10 +127,10 @@ export class PlotRendererComponent implements AfterViewInit {
     this.svg.setAttribute('width', '200');
     this.svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     this.renderer.appendChild(this.elementRef.nativeElement, this.svg);
-    this.createPolarGraph();
+    this.startup();
   }
 
-  createPolarGraph() {
+  startup() {
     this.circles.push(this.createCircle('101', '101', '100'));
     this.circles.push(this.createCircle('101', '101', '75'));
     this.circles.push(this.createCircle('101', '101', '50'));
@@ -122,26 +138,22 @@ export class PlotRendererComponent implements AfterViewInit {
     this.lines.push(this.createLine('1', '101', '201', '101', '0'));
     this.lines.push(this.createLine('1', '101', '201', '101', '-30'));
     this.lines.push(this.createLine('1', '101', '201', '101', '-60'));
-    this.lines.push(this.createLine('1', '101', '201', '101', '-90'));
-    this.lines.push(this.createLine('1', '101', '201', '101', '-120'));
-    this.lines.push(this.createLine('1', '101', '201', '101', '-150'));
+    this.lines.push(this.createLine('101', '1', '101', '201', '0'));
+    this.lines.push(this.createLine('101', '1', '101', '201', '-30'));
+    this.lines.push(this.createLine('101', '1', '101', '201', '-60'));
     this.plotPath.setAttribute('stroke', 'blue');
     this.renderer.appendChild(this.svg, this.plotPath);
   }
 
   changeToCartesian() {
-    //TODO
     for (let circle of this.circles) {
       circle.setAttribute('opacity', '0');
     }
     for (let line of this.lines) {
       line.setAttribute('opacity', '0');
     }
-    this.lines[0].setAttribute('y1', '201');
-    this.lines[0].setAttribute('y2', '201');
+    //TODO axis positions
     this.lines[0].setAttribute('opacity', '1');
-    this.lines[3].setAttribute('y1', '1');
-    this.lines[3].setAttribute('y2', '1');
     this.lines[3].setAttribute('opacity', '1');
   }
 
@@ -154,8 +166,8 @@ export class PlotRendererComponent implements AfterViewInit {
     }
     this.lines[0].setAttribute('y1', '101');
     this.lines[0].setAttribute('y2', '101');
-    this.lines[3].setAttribute('y1', '101');
-    this.lines[3].setAttribute('y2', '101');
+    this.lines[3].setAttribute('x1', '101');
+    this.lines[3].setAttribute('x2', '101');
   }
 
   changeGraph(planeType: string) {

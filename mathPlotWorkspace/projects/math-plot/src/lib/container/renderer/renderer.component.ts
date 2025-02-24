@@ -30,7 +30,7 @@ export class RendererComponent {
       for (let i = 0; i <= (event.end - event.start) * 100; i++) {
         let y = this.tree.calculate(i / 100 + event.start, false);
         if (isFinite(y)) {
-          points.push({ x: i / 100, y });
+          points.push({ x: i / 100 + event.start, y });
         } else {
           return;
         }
