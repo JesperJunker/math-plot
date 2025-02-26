@@ -10,6 +10,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      "formula-ui": [
+        "./dist/formula-ui"
+      ],
       "math-plot": [
         "./dist/math-plot"
       ]

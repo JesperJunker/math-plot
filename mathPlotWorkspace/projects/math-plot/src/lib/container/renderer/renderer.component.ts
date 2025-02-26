@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { mathTree, MathTreeNode, NumberNode } from '../../util/math-tree';
-import { FormulaRendererComponent } from '../../ui/formula-renderer/formula-renderer.component';
 import { PlotRendererComponent } from '../../ui/plot-renderer/plot-renderer.component';
 import { PlotterFormComponent } from '../../ui/plotter-form/plotter-form.component';
 import { PlotterConfig } from '../../models/plotterConfig';
@@ -8,11 +7,7 @@ import { PlotterConfig } from '../../models/plotterConfig';
 @Component({
   selector: 'lib-renderer',
   standalone: true,
-  imports: [
-    FormulaRendererComponent,
-    PlotRendererComponent,
-    PlotterFormComponent,
-  ],
+  imports: [PlotRendererComponent, PlotterFormComponent],
   templateUrl: './renderer.component.html',
   styleUrl: './renderer.component.css',
 })

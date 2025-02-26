@@ -1,4 +1,4 @@
-import {Component, computed, effect, input} from '@angular/core';
+import { Component, computed, effect, input } from '@angular/core';
 import {
   mathTree,
   BinaryNode,
@@ -6,16 +6,16 @@ import {
   UnaryNode,
   MathTreeNode,
   precedence,
-} from '../../util/math-tree';
+} from '../util/math-tree';
 
 @Component({
   selector: 'lib-formula-renderer',
   standalone: true,
   imports: [],
-  templateUrl: './formula-renderer.component.html',
-  styleUrl: './formula-renderer.component.css',
+  templateUrl: './lib-formula-renderer.component.html',
+  styleUrl: './lib-formula-renderer.component.css',
 })
-export class FormulaRendererComponent {
+export class LibFormulaRendererComponent {
   formula = input.required<MathTreeNode>();
   readonly paranthesis = input<boolean>(false);
 

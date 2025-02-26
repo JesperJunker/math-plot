@@ -1,0 +1,47 @@
+span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fraction {
+    font-size: 90%;
+}
+
+.fraction, .operator, .number {
+    text-align: center;
+    padding: .1em;
+}
+
+.numerator, .denominator {
+    display: block;
+    padding-left: .1em;
+    padding-right: .1em;
+}
+
+.numerator {
+    border-bottom: 1px solid black;
+}
+
+.normal {
+    vertical-align: .5em
+}
+
+.big {
+    vertical-align: .75em;
+    transform: scale(1, 1.5);
+}
+
+.bigger {
+  vertical-align: 1.45em;
+  transform: scale(1, 2.25);
+}
+
+.bigger-low {
+  vertical-align: .75em;
+  transform: scale(1, 2.25);
+}
+
+.biggest {
+    vertical-align: 1.55em;
+    transform: scale(1, 3.375);
+}
