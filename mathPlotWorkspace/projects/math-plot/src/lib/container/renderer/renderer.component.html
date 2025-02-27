@@ -1,2 +1,4 @@
-<lib-plot-renderer [config]="config" ></lib-plot-renderer>
-<lib-plotter-form (formState)="formChanges($event)"></lib-plotter-form>
+<plot-renderer [config]="conf()" ></plot-renderer>
+@if (form()) {
+<lib-plotter-form (formState)="formChanges($event)" [config]="conf()"></lib-plotter-form>
+}

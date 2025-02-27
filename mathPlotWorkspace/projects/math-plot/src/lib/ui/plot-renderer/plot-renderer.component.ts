@@ -11,7 +11,7 @@ import {
 import { PlotterConfig } from '../../models/plotterConfig';
 
 @Component({
-  selector: 'lib-plot-renderer',
+  selector: 'plot-renderer',
   standalone: true,
   imports: [],
   templateUrl: './plot-renderer.component.html',
@@ -37,7 +37,7 @@ export class PlotRendererComponent implements AfterViewInit {
     const scale = 100;
     if (conf.planeType === 'Polar') {
       const offset = 101;
-      for (let i = conf.start; i <= conf.end; i++) {
+      for (let i = conf.start; i <= Math.min(conf.end, input.length - conf.start); i++) {
         points.push([
           offset +
             input[i - conf.start].x * scale * Math.cos((Math.PI * i) / 180),
@@ -63,14 +63,12 @@ export class PlotRendererComponent implements AfterViewInit {
           margin -
           (-min_y * scale * (height - 2 * margin)) / ((max_y - min_y) * 100);
         y = Math.max(0, Math.min(height - margin, y));
-        console.log(x, min_x, max_x);
-        console.log(y, min_y, max_y);
         this.lines[0].setAttribute('y1', String(y));
         this.lines[0].setAttribute('y2', String(y));
         this.lines[3].setAttribute('x1', String(x));
         this.lines[3].setAttribute('x2', String(x));
       }
-      for (let i = 0; i <= (conf.end - conf.start) * 100; i++) {
+      for (let i = 0; i <= Math.min((conf.end - conf.start) * 100, input.length - 1); i++) {
         points.push([
           ((input[i].x - min_x) * scale * (width - 2 * margin)) /
             ((max_x - min_x) * 100) +
@@ -152,7 +150,6 @@ export class PlotRendererComponent implements AfterViewInit {
     for (let line of this.lines) {
       line.setAttribute('opacity', '0');
     }
-    //TODO axis positions
     this.lines[0].setAttribute('opacity', '1');
     this.lines[3].setAttribute('opacity', '1');
   }

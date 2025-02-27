@@ -1,11 +1,8 @@
 import {
   Component,
-  computed,
   effect,
   input,
   OnInit,
-  signal,
-  WritableSignal,
 } from '@angular/core';
 import {
   mathTree,
@@ -31,7 +28,6 @@ export class FormulaRendererComponent implements OnInit {
   readonly paranthesis = input<boolean>(false);
 
   ngOnInit(): void {
-    console.log(this.formula());
     this.tree = mathTree(this.formula());
   }
 

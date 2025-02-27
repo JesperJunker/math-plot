@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RendererComponent } from 'math-plot';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -22,4 +22,12 @@ export class AppComponent {
     this.formula = 'sin(x)';
   }
   title = 'math-plot-demo';
+  protected readonly config = {
+    start: 0,
+    end: 720,
+    formula:  '(cos(3*x/2)+cos(6*(x-45)))/2',
+    points: [],
+    planeType: 'Polar'
+  }
+
 }

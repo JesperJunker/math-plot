@@ -1,17 +1,16 @@
-import { Component, effect, output } from '@angular/core';
+import {Component, effect, input, OnInit, output} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PlotterConfig } from '../../models/plotterConfig';
-import { JsonPipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lib-plotter-form',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule],
   templateUrl: './plotter-form.component.html',
   styleUrl: './plotter-form.component.css',
 })
-export class PlotterFormComponent {
+export class PlotterFormComponent implements OnInit {
   formState = output<PlotterConfig>();
   readonly fb = new FormBuilder();
   formulaGroup = this.fb.group({
@@ -21,6 +20,17 @@ export class PlotterFormComponent {
     type: ['Polar', Validators.required],
   });
   previousType = 'Polar';
+
+  config = input.required<PlotterConfig>()
+
+  ngOnInit() {
+    let c = this.config()
+    this.formulaGroup.controls.formula.setValue(c.formula ?? 'cos(3*x)')
+    this.formulaGroup.controls.end.setValue(c.end ?? 360)
+    this.formulaGroup.controls.start.setValue(c.start ?? 0)
+    this.formulaGroup.controls.type.setValue(c.planeType != '' ? c.planeType : 'Polar')
+  }
+
 
   changes = toSignal(this.formulaGroup.valueChanges);
   changeType = toSignal(this.formulaGroup.controls.type.valueChanges);
