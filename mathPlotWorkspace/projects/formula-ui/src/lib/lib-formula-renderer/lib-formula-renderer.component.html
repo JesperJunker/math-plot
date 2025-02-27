@@ -47,6 +47,12 @@
       @case ('neg') {
         <span>–</span><lib-formula-renderer [formula]="t.value" [paranthesis]="isLessPrecedence(t.operator, t.value)"></lib-formula-renderer>
       }
+      @case ('sqrt') {
+        <span [classList]="'root-symbol '+ paranthesisStyle(t.value)+'-root-symbol'">√</span>
+        <span class="root">
+          <lib-formula-renderer [formula]="t.value" [paranthesis]="false"></lib-formula-renderer>
+        </span>
+      }
       @default {
         <span>{{t.operator}}</span><lib-formula-renderer [formula]="t.value" [paranthesis]="true"></lib-formula-renderer>
       }

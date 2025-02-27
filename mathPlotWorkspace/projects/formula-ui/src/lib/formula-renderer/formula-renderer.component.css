@@ -45,3 +45,10 @@ span {
     vertical-align: 1.55em;
     transform: scale(1, 3.375);
 }
+
+.root-symbol {
+    margin-right: -.5px;
+}
+.root {
+    border-top: 1px solid black;
+}

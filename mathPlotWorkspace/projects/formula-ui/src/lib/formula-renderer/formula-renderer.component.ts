@@ -1,8 +1,13 @@
 import {
+  AfterViewInit,
   Component,
   effect,
+  ElementRef,
+  inject,
   input,
   OnInit,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
 import {
   mathTree,
@@ -21,11 +26,16 @@ import { LibFormulaRendererComponent } from '../lib-formula-renderer/lib-formula
   templateUrl: './formula-renderer.component.html',
   styleUrl: './formula-renderer.component.css',
 })
-export class FormulaRendererComponent implements OnInit {
+export class FormulaRendererComponent implements OnInit, AfterViewInit {
   formula = input.required<string>();
   tree: MathTreeNode = new NumberNode('0');
   treeThingy = effect(() => (this.tree = mathTree(this.formula())));
   readonly paranthesis = input<boolean>(false);
+  renderer = inject(Renderer2);
+  @ViewChild('wrapper') elementRef!: ElementRef;
+
+  protected readonly Math = Math;
+  protected readonly Number = Number;
 
   ngOnInit(): void {
     this.tree = mathTree(this.formula());
@@ -69,6 +79,15 @@ export class FormulaRendererComponent implements OnInit {
     return 'normal';
   }
 
-  protected readonly Math = Math;
-  protected readonly Number = Number;
+  ngAfterViewInit(): void {
+    (<HTMLElement>this.elementRef.nativeElement)
+      .querySelectorAll('.root-symbol')
+      .forEach(
+        (el) =>
+          ((<HTMLElement>el).style.transform =
+            'scaleY(' +
+            (<HTMLElement>this.renderer.nextSibling(el)).offsetHeight / 18.9 +
+            ')')
+      );
+  }
 }

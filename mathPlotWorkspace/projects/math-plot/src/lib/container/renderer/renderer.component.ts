@@ -1,4 +1,11 @@
-import {Component, computed, input, InputSignal, OnInit, signal} from '@angular/core';
+import {
+  Component,
+  computed,
+  input,
+  InputSignal,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { mathTree, MathTreeNode, NumberNode } from '../../util/math-tree';
 import { PlotRendererComponent } from '../../ui/plot-renderer/plot-renderer.component';
 import { PlotterFormComponent } from '../../ui/plotter-form/plotter-form.component';
@@ -15,9 +22,9 @@ export class RendererComponent implements OnInit {
   formula = '';
   tree: MathTreeNode = new NumberNode('0');
   config: InputSignal<PlotterConfig> = input.required<PlotterConfig>();
-  form = input<boolean>()
-  c = computed(() => this.formChanges(this.config() || new PlotterConfig()))
-  conf = signal(new PlotterConfig())
+  form = input<boolean>();
+  c = computed(() => this.formChanges(this.config() || new PlotterConfig()));
+  conf = signal(new PlotterConfig());
 
   formChanges(event: PlotterConfig) {
     this.formula = event.formula;
@@ -28,7 +35,7 @@ export class RendererComponent implements OnInit {
         for (let i = 0; i <= (event.end - event.start) * 100; i++) {
           let y = this.tree.calculate(i / 100 + event.start, false);
           if (isFinite(y)) {
-            points.push({x: i / 100 + event.start, y});
+            points.push({ x: i / 100 + event.start, y });
           } else {
             return;
           }
@@ -46,11 +53,11 @@ export class RendererComponent implements OnInit {
           }
         }
       }
-      this.conf.set({...event, points});
+      this.conf.set({ ...event, points });
     }
   }
 
   ngOnInit() {
-    this.formChanges(this.config())
+    this.formChanges(this.config());
   }
 }

@@ -64,7 +64,7 @@ export class BinaryNode implements MathTreeNode {
               (this.left as NumberNode).calculate(0, false) < 0) ||
               this.left instanceof BinaryNode
           ) +
-          ' ^ ' +
+          '^' +
           this.right.toString(
             precedence[(this.right as BinaryNode).operator] < precedence['^']
           );
@@ -117,6 +117,12 @@ export class UnaryNode implements MathTreeNode {
         return polar
           ? Math.cos((this.value.calculate(x, polar) * Math.PI) / 180)
           : Math.cos(this.value.calculate(x, polar));
+      case 'tan':
+        return polar
+          ? Math.tan((this.value.calculate(x, polar) * Math.PI) / 180)
+          : Math.tan(this.value.calculate(x, polar));
+      case 'sqrt':
+        return Math.sqrt(this.value.calculate(x, polar));
       default:
         return NaN;
     }
@@ -138,6 +144,9 @@ export class UnaryNode implements MathTreeNode {
         break;
       case 'cot':
         str = 'cot' + this.value.toString(true);
+        break;
+      case 'sqrt':
+        str = 'sqrt' + this.value.toString(true);
         break;
       default:
         str = '';
@@ -164,13 +173,24 @@ export class NumberNode implements MathTreeNode {
 
 function isOperator(op: string) {
   return (
-    ['+', '-', '*', '/', 'neg', '^', 'sin', 'cos', 'tan', 'cot'].indexOf(op) !==
-    -1
+    [
+      '+',
+      '-',
+      '*',
+      '/',
+      'neg',
+      '^',
+      'sin',
+      'cos',
+      'tan',
+      'cot',
+      'sqrt',
+    ].indexOf(op) !== -1
   );
 }
 
 function isUnaryOperator(op: string): boolean {
-  return ['neg', 'sin', 'cos', 'tan', 'cot'].indexOf(op) !== -1;
+  return ['neg', 'sin', 'cos', 'tan', 'cot', 'sqrt'].indexOf(op) !== -1;
 }
 
 export const precedence: Record<string, Number> = {
@@ -178,6 +198,7 @@ export const precedence: Record<string, Number> = {
   cos: 5,
   tan: 5,
   cot: 5,
+  sqrt: 5,
   '^': 4,
   neg: 3,
   '*': 2,
@@ -188,7 +209,7 @@ export const precedence: Record<string, Number> = {
 
 function infixToPostFix(input: string): string[] {
   const tokens =
-    input.match(/\d+(\.\d+)?|[+\-*/^()]|(sin|cos|tan|cot)|x/g) || [];
+    input.match(/\d+(\.\d+)?|[+\-*/^()]|(sin|cos|tan|cot|sqrt)|x/g) || [];
   const output: string[] = [];
   const operators: string[] = [];
   let prevToken = '';

@@ -17,7 +17,7 @@ import { FormulaRendererComponent } from 'formula-ui';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  formula = '(sin(x)^3+2)/5';
+  formula = 'sqrt(1/2)+sqrt(1/(2/2))+sqrt((1/2)/2)+sqrt((1/3)/(2/2))-sqrt(2+3)';
   testi() {
     this.formula = 'sin(x)';
   }
@@ -25,9 +25,8 @@ export class AppComponent {
   protected readonly config = {
     start: 0,
     end: 720,
-    formula:  '(cos(3*x/2)+cos(6*(x-45)))/2',
+    formula: '(cos(3*x/2)+cos(6*(x-45)))/2',
     points: [],
-    planeType: 'Polar'
-  }
-
+    planeType: 'Polar',
+  };
 }

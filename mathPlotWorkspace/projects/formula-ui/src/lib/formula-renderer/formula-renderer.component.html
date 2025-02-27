@@ -1,3 +1,4 @@
+<span #wrapper>
 @let t = tree;
 @if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
   <span [classList]="'paranthesis'">(</span>
@@ -27,8 +28,8 @@
           <span [classList]="paranthesisStyle(t) +  ' paranthesis'">(</span>
         }
         <div style="display: inline-block;">
-          <span class="numerator"><lib-formula-renderer [formula]="t.left"></lib-formula-renderer></span>
-          <span class="denominator"><lib-formula-renderer [formula]="t.right"></lib-formula-renderer></span>
+            <span class="numerator"><lib-formula-renderer [formula]="t.left"></lib-formula-renderer></span>
+            <span class="denominator"><lib-formula-renderer [formula]="t.right"></lib-formula-renderer></span>
         </div>
         @if (paranthesis()) {
           <span [classList]="paranthesisStyle(t) + ' paranthesis'">)</span>
@@ -47,6 +48,12 @@
       @case ('neg') {
         <span>–</span><lib-formula-renderer [formula]="t.value" [paranthesis]="isLessPrecedence(t.operator, t.value)"></lib-formula-renderer>
       }
+      @case ('sqrt') {
+        <span [classList]="'root-symbol '+ paranthesisStyle(t.value)+'-root-symbol'">√</span>
+        <span class="root">
+          <lib-formula-renderer [formula]="t.value" [paranthesis]="false"></lib-formula-renderer>
+        </span>
+      }
       @default {
         <span>{{t.operator}}</span><lib-formula-renderer [formula]="t.value" [paranthesis]="true"></lib-formula-renderer>
       }
@@ -56,3 +63,4 @@
 @if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
   <span [classList]="'paranthesis'">)</span>
 }
+</span>

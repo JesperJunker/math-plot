@@ -45,3 +45,23 @@ span {
     vertical-align: 1.55em;
     transform: scale(1, 3.375);
 }
+
+.root-symbol {
+    margin-right: -.5px;
+}
+.root {
+    border-top: 1px solid black;
+}
+
+/*.normal-root-symbol {
+    transform: scaleY(1);
+}
+.big-root-symbol {
+    transform: scaleY(2.2);
+}
+.bigger-root-symbol, .bigger-low-root-symbol {
+    transform: scaleY(3.2);
+}
+.biggest-root-symbol {
+    transform: scaleY(4.1);
+}*/

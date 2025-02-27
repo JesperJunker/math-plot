@@ -1,6 +1,6 @@
 {
   "name": "@jesperjunker/math-plot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "JesperJunker",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
@@ -14,5 +14,6 @@
         "type": "git",
         "url": "https://github.com/JesperJunker/math-plot.git",
         "directory": "mathPlotWorkspace/projects/math-plot"
-    }
+    },
+    "keywords": ["math", "plotting", "cartesian", "polar"]
 }
