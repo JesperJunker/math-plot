@@ -1,6 +1,6 @@
 # MathPlot
 
-This library is forplotting mathematical functions.
+This library is for plotting mathematical functions.
 One can plot the formula in between a start and end for x in polar or cartesian coordinates.
 
 ## Notes

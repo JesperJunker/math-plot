@@ -1,6 +1,6 @@
 {
   "name": "@jesperjunker/math-plot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "JesperJunker",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
