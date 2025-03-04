@@ -1,12 +1,11 @@
 @let t = formula();
 @if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
-  <span [classList]="'paranthesis'">(</span>
-}
+  <span class="paranthesis-left">(</span>}
 @if (t) {
   @if (isNumberNode(t)) {
   @if (t.value !== 'x') {
     @if (t.calculate(0, false) < 0) {
-      <span>–</span>
+      <span class="neg">–</span>
     }
     <span>{{Math.abs(Number(t.value))}}</span>
     } @else {
@@ -15,37 +14,39 @@
   } @else if (isBinaryNode(t)) {
     @if(t.operator === '-') {
       <lib-formula-renderer [formula]="t.left"></lib-formula-renderer>
-      <span>–</span>
+      <span class="neg">–</span>
       <lib-formula-renderer [formula]="t.right"></lib-formula-renderer>
     } @else if(t.operator === '+') {
       <lib-formula-renderer [formula]="t.left"></lib-formula-renderer>
       <span>＋</span>
       <lib-formula-renderer [formula]="t.right"></lib-formula-renderer>
     } @else if (t.operator === '/') {
-      <span class="fraction">
         @if (paranthesis()) {
-          <span [classList]="paranthesisStyle(t) +  ' paranthesis'">(</span>
+          <span class="paranthesis-left">(</span>
         }
-        <div style="display: inline-block;">
+        <span style="display: inline-block;" class="fraction">
           <span class="numerator"><lib-formula-renderer [formula]="t.left"></lib-formula-renderer></span>
           <span class="denominator"><lib-formula-renderer [formula]="t.right"></lib-formula-renderer></span>
-        </div>
+        </span>
         @if (paranthesis()) {
-          <span [classList]="paranthesisStyle(t) + ' paranthesis'">)</span>
+          <span class="paranthesis-right">)</span>
         }
-      </span>
     } @else if (t.operator === '*') {
       <lib-formula-renderer [formula]="t.left"  [paranthesis]="isLessPrecedence(t.operator, t.left)"></lib-formula-renderer>
       <span>·</span>
       <lib-formula-renderer [formula]="t.right" [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer>
     } @else {
-      <lib-formula-renderer [formula]="t.left"  [paranthesis]="(isNumberNode(t.left) && t.left.calculate(0, false) < 0) || isBinaryNode(t.left)"></lib-formula-renderer>
-      <sup><lib-formula-renderer [formula]="t.right" [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer></sup>
+      <span class="exponent-wrapper">
+        <lib-formula-renderer [formula]="t.left"  [paranthesis]="(isNumberNode(t.left) && t.left.calculate(0, false) < 0) || isBinaryNode(t.left) || (isUnaryNode(t.left) && t.left.operator == 'neg')"></lib-formula-renderer>
+        <sup><lib-formula-renderer [formula]="t.right" [paranthesis]="isLessPrecedence(t.operator, t.right)"></lib-formula-renderer></sup>
+      </span>
     }
   } @else if(isUnaryNode(t)) {
     @switch (t.operator) {
       @case ('neg') {
-        <span>–</span><lib-formula-renderer [formula]="t.value" [paranthesis]="isLessPrecedence(t.operator, t.value)"></lib-formula-renderer>
+        <span class="neg-wrapper">
+          <span class="neg">–</span><lib-formula-renderer [formula]="t.value" [paranthesis]="isLessPrecedence(t.operator, t.value) && !(isBinaryNode(t.value) && t.value.operator == '/') && !(isUnaryNode(t.value) && t.value.operator == 'sqrt')"></lib-formula-renderer>
+        </span>
       }
       @case ('sqrt') {
         <span [classList]="'root-symbol '+ paranthesisStyle(t.value)+'-root-symbol'">√</span>
@@ -60,5 +61,5 @@
   }
 }
 @if (paranthesis() && !(isBinaryNode(t) && t.operator === '/')) {
-  <span [classList]="'paranthesis'">)</span>
+  <span class="paranthesis-right">)</span>
 }

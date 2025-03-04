@@ -17,7 +17,7 @@ import { FormulaRendererComponent } from 'formula-ui';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  formula = 'sqrt(1/2)+sqrt(1/(2/2))+sqrt((1/2)/2)+sqrt((1/3)/(2/2))-sqrt(2+3)';
+  formula = '((-sqrt(-(1/x)))^2)^3*3+(1/2)^2+(1/2/3)^2+sqrt((1/2)/2)+sqrt((1/3)/(2/2))-sqrt(2+3)';
   testi() {
     this.formula = 'sin(x)';
   }

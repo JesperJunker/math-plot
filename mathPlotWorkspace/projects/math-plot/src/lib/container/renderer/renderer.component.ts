@@ -41,8 +41,8 @@ export class RendererComponent implements OnInit {
           }
         }
       } else {
-        for (let i = event.start; i <= event.end; i++) {
-          let radius = this.tree.calculate(i, true);
+        for (let i = 0; i <= event.end - event.start; i++) {
+          let radius = this.tree.calculate(i + event.start, true);
           if (isFinite(radius)) {
             points.push({
               x: radius,

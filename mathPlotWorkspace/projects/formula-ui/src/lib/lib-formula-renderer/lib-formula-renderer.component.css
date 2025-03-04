@@ -53,15 +53,11 @@ span {
     border-top: 1px solid black;
 }
 
-/*.normal-root-symbol {
-    transform: scaleY(1);
+.neg {
+  vertical-align: baseline;
 }
-.big-root-symbol {
-    transform: scaleY(2.2);
+
+.neg-wrapper, lib-formula-renderer, .exponent-wrapper {
+  width: fit-content;
+  height: fit-content;
 }
-.bigger-root-symbol, .bigger-low-root-symbol {
-    transform: scaleY(3.2);
-}
-.biggest-root-symbol {
-    transform: scaleY(4.1);
-}*/

@@ -3,10 +3,8 @@ import {
   Component,
   effect,
   ElementRef,
-  inject,
   input,
   OnInit,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import {
@@ -31,7 +29,6 @@ export class FormulaRendererComponent implements OnInit, AfterViewInit {
   tree: MathTreeNode = new NumberNode('0');
   treeThingy = effect(() => (this.tree = mathTree(this.formula())));
   readonly paranthesis = input<boolean>(false);
-  renderer = inject(Renderer2);
   @ViewChild('wrapper') elementRef!: ElementRef;
 
   protected readonly Math = Math;
@@ -79,6 +76,7 @@ export class FormulaRendererComponent implements OnInit, AfterViewInit {
     return 'normal';
   }
 
+  @ViewChild('wrapper') wrapper!: ElementRef
   ngAfterViewInit(): void {
     (<HTMLElement>this.elementRef.nativeElement)
       .querySelectorAll('.root-symbol')
@@ -86,8 +84,27 @@ export class FormulaRendererComponent implements OnInit, AfterViewInit {
         (el) =>
           ((<HTMLElement>el).style.transform =
             'scaleY(' +
-            (<HTMLElement>this.renderer.nextSibling(el)).offsetHeight / 18.9 +
+            ((<HTMLElement>el).nextSibling as HTMLElement).offsetHeight / 18.5 +
             ')')
       );
+    (<HTMLElement>this.wrapper.nativeElement).querySelectorAll('.paranthesis-left')
+      .forEach(el => {
+        let nextRealSibling: HTMLElement = (<HTMLElement>el).nextSibling as HTMLElement
+        while(!nextRealSibling || !nextRealSibling.offsetHeight) {
+          nextRealSibling = (<HTMLElement>nextRealSibling).nextSibling as HTMLElement;
+        }
+        console.log(nextRealSibling.offsetHeight);
+        (<HTMLElement>el).style.transform = 'scaleY(' + ((nextRealSibling.offsetHeight / 50 * 3)) + ')'
+      });
+    (<HTMLElement>this.wrapper.nativeElement).querySelectorAll('.paranthesis-right')
+      .forEach(el => {
+        let previousRealSibling: HTMLElement = (<HTMLElement>el).previousSibling as HTMLElement;
+        while(!previousRealSibling || !previousRealSibling.offsetHeight) {
+          console.log(previousRealSibling)
+          previousRealSibling = (<HTMLElement>previousRealSibling).previousSibling as HTMLElement;
+        }
+        console.log(previousRealSibling.offsetHeight);
+        (<HTMLElement>el).style.transform = 'scaleY(' + ((previousRealSibling.offsetHeight / 50 * 3)) + ')'
+      })
   }
 }

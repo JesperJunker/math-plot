@@ -52,3 +52,12 @@ span {
 .root {
     border-top: 1px solid black;
 }
+
+.neg {
+  vertical-align: baseline;
+}
+
+.neg-wrapper, lib-formula-renderer, .exponent-wrapper {
+  width: fit-content;
+  height: fit-content;
+}

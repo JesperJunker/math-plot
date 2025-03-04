@@ -38,15 +38,15 @@ export class PlotRendererComponent implements AfterViewInit {
     if (conf.planeType === 'Polar') {
       const offset = 101;
       for (
-        let i = conf.start;
+        let i = 0;
         i <= Math.min(conf.end, input.length - conf.start);
         i++
       ) {
         points.push([
           offset +
-            input[i - conf.start].x * scale * Math.cos((Math.PI * i) / 180),
+            input[i].x * scale * Math.cos((Math.PI * i) / 180),
           offset -
-            input[i - conf.start].y * scale * Math.sin((Math.PI * i) / 180),
+            input[i].y * scale * Math.sin((Math.PI * i) / 180),
         ]);
       }
     } else {
